@@ -44,7 +44,17 @@ export default {
       //       "",
       //   },
       // });
-      const response = await fetch("/.netlify/functions/createTodo");
+      const { access_token } = netlifyIdentity.currentUser().token;
+      const response = await fetch("/.netlify/functions/createTodo", {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${access_token}`
+        },
+        body: JSON.stringify({
+          title: this.name,
+          completed: false
+        })
+      });
       const json = await response.json();
       this.todos.push(json.data.createTodo);
 
